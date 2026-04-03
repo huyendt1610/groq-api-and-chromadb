@@ -7,6 +7,7 @@ A Python project demonstrating how to use the [Groq API](https://groq.com/) for 
 - **Streaming chat completion** — streams tokens in real time using `llama-3.1-8b-instant`
 - **Non-streaming chat completion** — returns the full response at once
 - **Web scraping + summarization** — scrapes a webpage with BeautifulSoup and summarizes it using `llama-3.3-70b-versatile`
+- **Vector search with ChromaDB** — embeds documents from a text file and runs semantic similarity queries
 
 ## Requirements
 
@@ -25,7 +26,7 @@ A Python project demonstrating how to use the [Groq API](https://groq.com/) for 
 2. Install dependencies:
 
    ```bash
-   pip install groq python-dotenv requests beautifulsoup4
+   pip install -r requirements.txt
    ```
 
 3. Create a `.env` file in the project root:
@@ -36,7 +37,7 @@ A Python project demonstrating how to use the [Groq API](https://groq.com/) for 
 
 ## Usage
 
-Run the script:
+### Groq API
 
 ```bash
 python groq_api.py
@@ -51,6 +52,14 @@ def main():
     # stream_chat_completion(client)
     stream_chat_completionwith_web_scraping(client)
 ```
+
+### ChromaDB Vector Search
+
+```bash
+python chroma_db.py
+```
+
+Reads lines from `policies.txt`, adds them to an in-memory ChromaDB collection with auto-generated embeddings, then queries the collection with semantic search questions. Output shows the top matching documents for each query.
 
 ## Models Used
 
