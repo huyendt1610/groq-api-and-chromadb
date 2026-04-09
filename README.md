@@ -9,9 +9,26 @@ A Python project demonstrating how to use the [Groq API](https://groq.com/) for 
 - **Web scraping + summarization** — scrapes a webpage with BeautifulSoup and summarizes it using `llama-3.3-70b-versatile`
 - **Vector search with ChromaDB** — embeds documents from a text file and runs semantic similarity queries
 - **Groq chat app** — Streamlit chat interface with conversation memory and model selection
-- **RAG app (OpenAI)** — Streamlit app that ingests PDFs, builds a FAISS vector index, and answers questions using GPT-4o-mini
-- **Main RAG app** — Same RAG pipeline with a sidebar UI for uploading and managing PDF documents
-- **Restaurant tool** — Streamlit app that generates restaurant names and menus by cuisine
+- **OpenAI chat app** — Streamlit RAG app that ingests PDFs, builds a FAISS vector index, and answers questions using GPT-4o-mini
+- **RAG app (main)** — Same RAG pipeline with a sidebar UI for uploading and managing PDF documents
+
+## Project Structure
+
+```
+groq-api/
+├── groq_api.py              # Streaming, non-streaming, and web-scraping demos
+├── chroma_db.py             # ChromaDB vector search demo
+├── apps/
+│   ├── groq_chat/app.py     # Streamlit chat app powered by Groq + LangChain
+│   ├── openai_chat/app.py   # RAG app (OpenAI + FAISS, no upload UI)
+│   └── rag/app.py           # RAG app with PDF upload sidebar
+├── notebooks/
+│   ├── ai_agent.ipynb       # AI agent notebook
+│   └── check_semantic_search.ipynb
+├── data/
+│   └── papers/              # PDF files for RAG indexing
+└── vector_index/            # Persisted FAISS index
+```
 
 ## Requirements
 
@@ -64,22 +81,22 @@ def main():
 python chroma_db.py
 ```
 
-Reads lines from `data/policies.txt`, adds them to an in-memory ChromaDB collection with auto-generated embeddings, then queries the collection with semantic search questions. Output shows the top matching documents for each query.
+Reads lines from `data/policies.txt`, adds them to an in-memory ChromaDB collection with auto-generated embeddings, then queries the collection with semantic search questions.
 
 ### Groq Chat App
 
 ```bash
-streamlit run groq_chat_app.py
+streamlit run apps/groq_chat/app.py
 ```
 
 A Streamlit chat interface powered by LangChain + Groq. Features:
 - Model selection (`llama-3.3-70b-versatile`, `llama-3.1-8b-instant`, `openai/gpt-oss-120b`)
 - Configurable conversation memory length (1–10 turns)
 
-### RAG App — OpenAI + FAISS
+### OpenAI Chat App — RAG with FAISS
 
 ```bash
-streamlit run openai_chat_app.py
+streamlit run apps/openai_chat/app.py
 ```
 
 A retrieval-augmented generation (RAG) app that:
@@ -88,21 +105,13 @@ A retrieval-augmented generation (RAG) app that:
 3. Stores/loads a FAISS vector index locally (`vector_index/`)
 4. Answers questions using `gpt-4o-mini` with citations
 
-### Main RAG App (with PDF upload UI)
+### RAG App (with PDF upload UI)
 
 ```bash
-streamlit run main.py
+streamlit run apps/rag/app.py
 ```
 
 Same RAG pipeline as above, with an added sidebar for uploading PDF files directly from the browser, viewing indexed files, and deleting them.
-
-### Restaurant Tool
-
-```bash
-streamlit run restaurant.py
-```
-
-Selects a cuisine from the sidebar and generates a restaurant name and menu using a LangChain helper.
 
 ## Models Used
 
@@ -111,6 +120,6 @@ Selects a cuisine from the sidebar and generates a restaurant name and menu usin
 | `groq_api.py` — `stream_chat_completion` | `llama-3.1-8b-instant` |
 | `groq_api.py` — `non_stream_chat_completion` | `llama-3.1-8b-instant` |
 | `groq_api.py` — `stream_chat_completionwith_web_scraping` | `llama-3.3-70b-versatile` |
-| `groq_chat_app.py` | selectable (default: `llama-3.3-70b-versatile`) |
-| `openai_chat_app.py` / `main.py` — embeddings | `text-embedding-3-small` |
-| `openai_chat_app.py` / `main.py` — QA | `gpt-4o-mini` |
+| `apps/groq_chat/app.py` | selectable (default: `llama-3.3-70b-versatile`) |
+| `apps/openai_chat/app.py` / `apps/rag/app.py` — embeddings | `text-embedding-3-small` |
+| `apps/openai_chat/app.py` / `apps/rag/app.py` — QA | `gpt-4o-mini` |
