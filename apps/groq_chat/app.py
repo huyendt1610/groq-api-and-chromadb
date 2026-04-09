@@ -44,7 +44,7 @@ def main():
         # Trim to last N turns (each turn = 1 human + 1 AI message)
         all_messages = st.session_state.message_history.messages
         trimmed = ChatMessageHistory()
-        trimmed.messages = all_messages[-(conversation_memory_length * 2):] # limit the conversation history to the last N turns 
+        trimmed.messages = all_messages[-(conversation_memory_length * 2):]
         return trimmed
 
     chain_with_history = RunnableWithMessageHistory(
@@ -59,7 +59,6 @@ def main():
             {"input": user_question},
             config={"configurable": {"session_id": "streamlit_session"}}
         )
-        # Save to full message history for future trimming
         st.session_state.message_history.add_user_message(user_question)
         st.session_state.message_history.add_ai_message(response.content)
 
